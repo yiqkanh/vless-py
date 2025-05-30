@@ -1,25 +1,27 @@
 import asyncio
-# import importlib
+import importlib
 import struct
-# import sys
+import sys
 import os
 import socket
 import uuid
-# import subprocess
+import subprocess
+
+def ensure_module(name, silent=False):
+    try:
+        importlib.import_module(name)
+    except ImportError:
+        if not silent:
+            print(f"Module '{name}' not found. Installing...")
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", name],
+            stdout=subprocess.DEVNULL if silent else None
+        )
+ensure_module("aiohttp")
 
 import aiohttp
 from aiohttp import web
 
-# def ensure_module(name, silent=False):
-#     try:
-#         importlib.import_module(name)
-#     except ImportError:
-#         if not silent:
-#             print(f"Module '{name}' not found. Installing...")
-#         subprocess.check_call(
-#             [sys.executable, "-m", "pip", "install", name],
-#             stdout=subprocess.DEVNULL if silent else None
-#         )
 
 NEZHA_SERVER = os.getenv('NEZHA_SERVER', '')
 NEZHA_PORT = os.getenv('NEZHA_PORT', '')
